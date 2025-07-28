@@ -2,11 +2,58 @@
 <html>
 
 	<head>
-		<title></title>
+		<title>The Bucket of Unused Ideas</title>
+		<style>
+			body {
+				background-color: black;
+				color: white;
+				font-size: 18px;
+			}
+
+	       #container {
+	            white-space: pre-wrap;
+	            padding: 1em;
+	            margin-bottom: 1em;
+	        }
+  		</style>
 	</head>
 
 	<body>
-		test
+	    <div id="container"></div>
+
+
+		<script>
+			"use strict";
+            
+	        document.addEventListener("DOMContentLoaded", () => {
+	            const url = "sample.json"; 
+
+	            async function loadJson(url) {
+	                try {
+	                    const response = await fetch(url);
+
+	                    if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+	                    const data = await response.json();
+
+	                    const index = parseInt(Math.random() * data.length);
+	                    const text = data[index].body;
+
+
+  						//document.body.appendChild(newTextNode);
+
+						const container = document.getElementById("container");
+	                    const textNode = document.createTextNode(text);
+       					container.appendChild(textNode);
+
+	                } catch (error) {
+	                    console.log(`Error loading JSON: ${error.message}.`);
+	                }
+	            }
+
+	            loadJson(url);
+	        });
+		</script>
 	</body>
 
 </html>
