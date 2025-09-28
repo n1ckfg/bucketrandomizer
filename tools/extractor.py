@@ -58,8 +58,7 @@ def extract_text_to_json(odt_filepath, json_filepath):
             if tag_name == 'p':
                 print(f"[{i+1:03d}] PARAGRAPH: '{preview}'")
 
-                if text_content.strip(): # Only include non-empty paragraphs
-                    extracted_text.append(text_content.strip())
+                extracted_text.append(text_content)
             elif tag_name == 'h':
                 # Headings usually have an outline-level attribute
                 level = element.attributes.get(('urn:oasis:names:tc:opendocument:xmlns:text:1.0', 'outline-level'), 'N/A')
@@ -74,7 +73,16 @@ def extract_text_to_json(odt_filepath, json_filepath):
                 print(f"[{i+1:03d}] Other Element: <{tag_name}>")            
 
         with open(json_filepath, 'w', encoding='utf-8') as f:
-            json.dump(extracted_text, f, ensure_ascii=False, indent=4) # Use json.dump for clean formatting
+            #json.dump(extracted_text, f, ensure_ascii=False, indent=4) # Use json.dump for clean formatting
+
+            json_objects_list: List[Dict[str, str]] = []
+            key_name = "body"
+
+            for item in extracted_text:
+                new_object = {key_name: item}
+                json_objects_list.append(new_object)
+
+            json.dump(json_objects_list, f, ensure_ascii=False,  indent=4)
         
         print(f"Extracted {len(extracted_text)} text elements to {json_filepath}.")
 
