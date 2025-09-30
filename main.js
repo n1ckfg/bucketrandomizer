@@ -30,8 +30,8 @@ class CookieManager {
 
 }
 
-function getUniqueRandomNumber(cookieName) {
-	const maxRange = 31;
+function getUniqueRandomNumber(cookieName, maxRange) {
+	//const maxRange = 31;
 
     let usedNumbers = CookieManager.getNumbers(cookieName);
     
@@ -43,7 +43,7 @@ function getUniqueRandomNumber(cookieName) {
         if (!usedNumbers.includes(randomNumber)) {
             usedNumbers.push(randomNumber);
             CookieManager.setNumbers(cookieName, usedNumbers);
-            console.log(`Generated a new unique number: ${randomNumber}. Total used: ${usedNumbers.length}`);
+            console.log(`Generated a new unique number: ${randomNumber}. Total used: ${usedNumbers.length}. Remaining: ${maxRange - usedNumbers.length}`);
             return randomNumber;
         }
 
@@ -56,10 +56,6 @@ function getUniqueRandomNumber(cookieName) {
         }
     }
 }
-
-const uniqueNumber = getUniqueRandomNumber('myUniqueNumbers');
-
-console.log(`Unique index number: ${uniqueNumber}`);
 
 // ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 
@@ -74,14 +70,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const data = await response.json();
 
+            const uniqueNumber = getUniqueRandomNumber("myUniqueNumbers", data.length);
+
+            console.log(`Unique index number: ${uniqueNumber}`);
+
             const text = data[uniqueNumber].body;
 
-				//document.body.appendChild(newTextNode);
+			//document.body.appendChild(newTextNode);
 
 			const container = document.getElementById("container");
             const textNode = document.createTextNode(text);
-				container.appendChild(textNode);
-
+			container.appendChild(textNode);
         } catch (error) {
             console.log(`Error loading JSON: ${error.message}.`);
         }
