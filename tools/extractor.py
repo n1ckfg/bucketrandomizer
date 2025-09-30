@@ -49,6 +49,9 @@ def extract_text_to_json(odt_filepath, json_filepath):
                 extracted_text.append(text_content.strip())
         '''
 
+        new_section_armed = False
+        new_line = ""
+
         for i, element in enumerate(content_elements):
             tag_name = element.qname[1]
 
@@ -58,7 +61,18 @@ def extract_text_to_json(odt_filepath, json_filepath):
             if tag_name == 'p':
                 print(f"[{i+1:03d}] PARAGRAPH: '{preview}'")
 
-                extracted_text.append(text_content)
+                if (text_content == "" and new_section_armed == False):
+                    new_section_armed = True
+                    new_line = ""
+                elif (text_content == "" and new_section_armed == True):
+                    if (len(new_line) > 0):
+                        extracted_text.append(new_line)
+                        new_section_armed = False
+                    else:
+                        pass
+                else:
+                    new_line += text_content + "\n"
+
             elif tag_name == 'h':
                 # Headings usually have an outline-level attribute
                 level = element.attributes.get(('urn:oasis:names:tc:opendocument:xmlns:text:1.0', 'outline-level'), 'N/A')
@@ -75,14 +89,16 @@ def extract_text_to_json(odt_filepath, json_filepath):
         with open(json_filepath, 'w', encoding='utf-8') as f:
             #json.dump(extracted_text, f, ensure_ascii=False, indent=4) # Use json.dump for clean formatting
 
-            json_objects_list: List[Dict[str, str]] = []
-            key_name = "body"
+            json_objects = []
 
-            for item in extracted_text:
-                new_object = {key_name: item}
-                json_objects_list.append(new_object)
+            for i, item in enumerate(extracted_text):
+                new_object = { 
+                    "index": i, 
+                    "body": item 
+                }
+                json_objects.append(new_object)
 
-            json.dump(json_objects_list, f, ensure_ascii=False,  indent=4)
+            json.dump(json_objects, f, ensure_ascii=False,  indent=4)
         
         print(f"Extracted {len(extracted_text)} text elements to {json_filepath}.")
 
