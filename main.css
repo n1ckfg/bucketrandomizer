@@ -26,7 +26,7 @@ body {
 #container {
     background-color: black;
 	color: white;
-    padding: 3rem;
+    padding: 3em;
 	border: 1px dashed darkgray;
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -39,23 +39,25 @@ body {
 
 #textbox {
     line-height: 1.6;
-    font-size: 1.2rem;
+    font-size: 1.2em;
 	white-space: pre-wrap;	
 }
 
 @media (orientation: portrait) {
     #textbox {
-        font-size: 1.8rem;
+        font-size: 1.8em;
     }
     
+    /*
     #container {
-        padding: 4rem 2.5rem;
+        padding: 4em 2.5em;
     }
+    */
 }
 
 @media (orientation: landscape) {
     #textbox {
-        font-size: 1.2rem;
+        font-size: 1.2em;
     }
 }
 
