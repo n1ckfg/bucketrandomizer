@@ -78,9 +78,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 			//document.body.appendChild(newTextNode);
 
-			const container = document.getElementById("container");
+			const textBox = document.getElementById("textbox");
             const textNode = document.createTextNode(text);
-			container.appendChild(textNode);
+			textBox.appendChild(textNode);
         } catch (error) {
             console.log(`Error loading JSON: ${error.message}.`);
         }
