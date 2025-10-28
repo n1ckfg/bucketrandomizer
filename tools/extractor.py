@@ -51,6 +51,8 @@ def extract_text_to_json(odt_filepath, json_filepath):
 
         new_section_armed = False
         new_line = ""
+        new_line_counter = 0
+        new_line_counter_max = 2
 
         for i, element in enumerate(content_elements):
             tag_name = element.qname[1]
@@ -64,15 +66,19 @@ def extract_text_to_json(odt_filepath, json_filepath):
                 if (text_content == "" and new_section_armed == False):
                     new_section_armed = True
                     new_line = ""
+                    new_line_counter = 0
                 elif (text_content == "" and new_section_armed == True):
                     if (len(new_line) > 0):
-                        extracted_text.append(new_line)
-                        new_section_armed = False
+                        new_line_counter += 1
+                        if (new_line_counter > new_line_counter_max):
+                            extracted_text.append(new_line)
+                            new_section_armed = False
                     else:
                         pass
                 else:
                     new_line += text_content + "\n"
 
+            '''
             elif tag_name == 'h':
                 # Headings usually have an outline-level attribute
                 level = element.attributes.get(('urn:oasis:names:tc:opendocument:xmlns:text:1.0', 'outline-level'), 'N/A')
@@ -80,25 +86,24 @@ def extract_text_to_json(odt_filepath, json_filepath):
             elif tag_name == 'list':
                 # This element contains list items (<text:list-item>)
                 item_count = len([c for c in element.childNodes if c.qname[1] == 'list-item'])
-                print(f"[{i+1:03d}] LIST ({item_count} items found)")
+                print(f"[{i+1:03d}] LIST ({item_count} items found): '{preview}'")
             elif tag_name == 'table':
-                print(f"[{i+1:03d}] TABLE found.")
+                print(f"[{i+1:03d}] TABLE found: '{preview}'")
             else:
-                print(f"[{i+1:03d}] Other Element: <{tag_name}>")            
+                print(f"[{i+1:03d}] Other Element: <{tag_name}>: '{preview}'")            
+            '''
 
         with open(json_filepath, 'w', encoding='utf-8') as f:
-            #json.dump(extracted_text, f, ensure_ascii=False, indent=4) # Use json.dump for clean formatting
-
-            json_objects = []
+            json_array = []
 
             for i, item in enumerate(extracted_text):
-                new_object = { 
+                json_object = { 
                     "index": i, 
                     "body": item 
                 }
-                json_objects.append(new_object)
+                json_array.append(json_object)
 
-            json.dump(json_objects, f, ensure_ascii=False,  indent=4)
+            json.dump(json_array, f, ensure_ascii=False,  indent=4)
         
         print(f"Extracted {len(extracted_text)} text elements to {json_filepath}.")
 
