@@ -72,10 +72,12 @@ a {
 }
 
 .qfont {
+    color: yellow;
     font-size: 4em;
 }
 
 #qcontainer {
+    color: yellow;
     position: absolute;
     bottom: 0;
     left: 0;

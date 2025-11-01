@@ -8,15 +8,21 @@ from odf.element import Node
 ODT_FILE = 'test.odt'
 JSON_FILE = 'test.json'
 
+def clean_extracted(input):
+    input = input.replace("\r\n", "\n")
+    input = input.replace("\r", "\n")
+    input = input.replace("\l", "\n")
+    return input
+
 def extract_text_from_element(element):
     text_content = []
     
     if hasattr(element, 'data') and element.data:
-        text_content.append(element.data)
+        text_content.append(clean_extracted(element.data))
     
     for child in element.childNodes:
         if child.nodeType == Node.TEXT_NODE:
-            text_content.append(child.data)
+            text_content.append(clean_extracted(child.data))
         elif child.nodeType == Node.ELEMENT_NODE:
             text_content.append(extract_text_from_element(child))
     
