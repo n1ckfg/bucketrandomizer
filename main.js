@@ -106,11 +106,11 @@ async function runHistory() {
     //const textNode = document.createTextNode("");
     //textBox.appendChild(textNode);
 
-    for (let i=0; i<usedNumbers.length; i++) {
+    for (let i=usedNumbers.length-1; i>=0; i--) {
         try {
             const index = parseInt(usedNumbers[i]);
             let text = data[index].body;
-            if (i != usedNumbers.length - 1) {
+            if (i !== 0) { //usedNumbers.length - 1) {
                 text += "\n\n"
             }
             textBox.innerHTML += text;
