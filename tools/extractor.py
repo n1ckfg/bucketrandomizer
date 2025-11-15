@@ -15,6 +15,28 @@ def clean_extracted(input):
     input = input.replace("\l", "\n")
     return input
 
+def get_text_formatting(doc, style_name):
+    is_bold = False
+    is_italic = False
+    
+    if not style_name:
+        return is_bold, is_italic
+    
+    style = doc.getStyleByName(style_name)
+    
+    if style:
+        text_props = style.getElementsByType(TextProperties)
+        if text_props:
+            props = text_props[0]
+            
+            weight = props.getAttribute('fontweight')
+            is_bold = weight == 'bold'
+            
+            style_attr = props.getAttribute('fontstyle')
+            is_italic = style_attr == 'italic'
+    
+    return is_bold, is_italic
+
 def extract_text_from_element(element, doc):
     text_content = []
     
@@ -28,22 +50,11 @@ def extract_text_from_element(element, doc):
             is_bold = False
             is_italic = False
 
-            style_name = child.attributes.get(('urn:oasis:names:tc:opendocument:xmlns:text:1.0', 'style-name'))
-            style = None
             try:
-                style = doc.getStyleByName(style_name)
+                style_name = child.getAttribute('stylename')
+                is_bold, is_italic = get_text_formatting(doc, style_name)
             except:
                 pass
-            if style:
-                text_props = style.getElementsByType(TextProperties)
-                if text_props:
-                    props = text_props[0]
-                    
-                    weight = props.getAttribute("fontweight")
-                    is_bold = weight == "bold"
-                    
-                    style_attr = props.getAttribute("fontstyle")
-                    is_italic = style_attr == "italic"  
 
             if (is_italic == True and is_bold == False):
                 text_content.append("<i>" + extract_text_from_element(child, doc) + "</i>")         
@@ -70,7 +81,7 @@ def extract_text_to_json(odt_filepath, json_filepath):
 
         content_elements = doc.text.childNodes
         print(f"--- {os.path.basename(odt_filepath)} ---")
-        print(f"Total top-level content elements found: {len(content_elements)}\n")
+        print(f"Total elements found: {len(content_elements)}\n")
 
         '''
         paragraphs = doc.text.getElementsByType(P)
@@ -139,7 +150,7 @@ def extract_text_to_json(odt_filepath, json_filepath):
 
             json.dump(json_array, f, ensure_ascii=False,  indent=4)
         
-        print(f"Extracted {len(extracted_text)} text elements to {json_filepath}.")
+        print(f"Extracted {len(extracted_text)} objects to {json_filepath}.")
 
     except Exception as e:
         print(f"An error occurred: {e}")
