@@ -67,10 +67,10 @@ function pickStory(data) {
     const text = data[uniqueNumber].body;
 
     const textBox = document.getElementById("textbox");
-    textBox.textContent = "";
+    //textBox.textContent = "";
 
-    const textNode = document.createTextNode(text);
-    textBox.appendChild(textNode);
+    //const textNode = document.createTextNode(text);
+    textBox.innerHTML = text; //appendChild(textNode);
 }
 
 async function loadJson(url) {
@@ -103,8 +103,8 @@ async function runHistory() {
     console.log(usedNumbers);
 
     const textBox = document.getElementById("textbox");
-    const textNode = document.createTextNode("");
-    textBox.appendChild(textNode);
+    //const textNode = document.createTextNode("");
+    //textBox.appendChild(textNode);
 
     for (let i=0; i<usedNumbers.length; i++) {
         try {
@@ -113,7 +113,7 @@ async function runHistory() {
             if (i != usedNumbers.length - 1) {
                 text += "\n\n"
             }
-            textNode.nodeValue += text;
+            textBox.innerHTML += text;
         } catch (error) {
             console.log(`Error reading history: ${error.message}.`);            
         }
