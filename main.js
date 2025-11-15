@@ -1,5 +1,8 @@
 "use strict";
 
+const url = "sample.json";
+const cookieName = "myUniqueNumbers";
+
 class CookieManager {
 
     static getNumbers(name) {
@@ -31,15 +34,13 @@ class CookieManager {
 }
 
 function getUniqueRandomNumber(cookieName, maxRange) {
-	//const maxRange = 31;
-
     let usedNumbers = CookieManager.getNumbers(cookieName);
     
-    // Find a unique number
+    // 1. Find a unique number
     while (true) {
         const randomNumber = Math.floor(Math.random() * maxRange);
 
-        // Check if used
+        // 2. Check if used
         if (!usedNumbers.includes(randomNumber)) {
             usedNumbers.push(randomNumber);
             CookieManager.setNumbers(cookieName, usedNumbers);
@@ -47,44 +48,54 @@ function getUniqueRandomNumber(cookieName, maxRange) {
             return randomNumber;
         }
 
-        // Check if the range is exhausted
+        // 3. Check if the range is exhausted
         if (usedNumbers.length >= maxRange) {
             CookieManager.clear(cookieName);
             console.warn("All numbers from 0-" + (maxRange - 1) + " have been used. The cookie has been cleared.");
             
-            usedNumbers = []; // The next iteration will find a new number.
+            // 4. The next iteration will find a new number.
+            usedNumbers = []; 
         }
     }
 }
 
-// ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
+async function loadJson(url) {
+    try {
+        const response = await fetch(url);
 
-document.addEventListener("DOMContentLoaded", () => {
-    const url = "sample.json"; 
+        if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
-    async function loadJson(url) {
-        try {
-            const response = await fetch(url);
+        return await response.json();
+    } catch (error) {
+        console.log(`Error loading JSON: ${error.message}.`);
+        return null;
+    }    
+}
 
-            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+async function runStep() {
+    const data = await loadJson(url);
 
-            const data = await response.json();
+    const uniqueNumber = getUniqueRandomNumber(cookieName, data.length);
 
-            const uniqueNumber = getUniqueRandomNumber("myUniqueNumbers", data.length);
+    console.log(`Unique index number: ${uniqueNumber}`);
 
-            console.log(`Unique index number: ${uniqueNumber}`);
+    const text = data[uniqueNumber].body;
 
-            const text = data[uniqueNumber].body;
+    const textBox = document.getElementById("textbox");
+    const textNode = document.createTextNode(text);
+    textBox.appendChild(textNode);
+}
 
-			//document.body.appendChild(newTextNode);
+async function runHistory() {
+    const data = await loadJson(url);
+    let usedNumbers = CookieManager.getNumbers(cookieName);
 
-			const textBox = document.getElementById("textbox");
-            const textNode = document.createTextNode(text);
-			textBox.appendChild(textNode);
-        } catch (error) {
-            console.log(`Error loading JSON: ${error.message}.`);
-        }
+    const textBox = document.getElementById("textbox");
+
+    for (let i=0; i<usedNumbers.length; i++) {
+        const text = data[i].body + "\n\n";
+
+        const textNode = document.createTextNode(text);
+        textBox.appendChild(textNode);
     }
-
-    loadJson(url);
-});
+}
