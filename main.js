@@ -59,6 +59,20 @@ function getUniqueRandomNumber(cookieName, maxRange) {
     }
 }
 
+function pickStory(data) {
+    const uniqueNumber = getUniqueRandomNumber(cookieName, data.length);
+
+    console.log(`Unique index number: ${uniqueNumber}`);
+
+    const text = data[uniqueNumber].body;
+
+    const textBox = document.getElementById("textbox");
+    textBox.textContent = "";
+
+    const textNode = document.createTextNode(text);
+    textBox.appendChild(textNode);
+}
+
 async function loadJson(url) {
     try {
         const response = await fetch(url);
@@ -75,27 +89,33 @@ async function loadJson(url) {
 async function runStep() {
     const data = await loadJson(url);
 
-    const uniqueNumber = getUniqueRandomNumber(cookieName, data.length);
-
-    console.log(`Unique index number: ${uniqueNumber}`);
-
-    const text = data[uniqueNumber].body;
-
     const textBox = document.getElementById("textbox");
-    const textNode = document.createTextNode(text);
-    textBox.appendChild(textNode);
+    textBox.addEventListener("click", function() {
+        pickStory(data);
+    });
+
+    pickStory(data);
 }
 
 async function runHistory() {
     const data = await loadJson(url);
     let usedNumbers = CookieManager.getNumbers(cookieName);
+    console.log(usedNumbers);
 
     const textBox = document.getElementById("textbox");
+    const textNode = document.createTextNode("");
+    textBox.appendChild(textNode);
 
     for (let i=0; i<usedNumbers.length; i++) {
-        const text = data[i].body + "\n\n";
-
-        const textNode = document.createTextNode(text);
-        textBox.appendChild(textNode);
+        try {
+            const index = parseInt(usedNumbers[i]);
+            let text = data[index].body;
+            if (i != usedNumbers.length - 1) {
+                text += "\n\n"
+            }
+            textNode.nodeValue += text;
+        } catch (error) {
+            console.log(`Error reading history: ${error.message}.`);            
+        }
     }
 }
