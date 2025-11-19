@@ -14,7 +14,7 @@ font-style: italic;
 
 body {
 	background-color: black;
-	color: white;
+	color: black;
 	font-size: 14px;
     min-height: 100vh;
     display: flex;
@@ -26,11 +26,12 @@ body {
 a {
     color: yellow;
     text-decoration: none;
+    text-shadow: -1px -1px 0 red, 1px -1px 0 red, -1px 1px 0 darkred, 1px 1px 0 darkred;
 }
 
 #container {
-    background-color: #545454;
-	color: white;
+    background-color: #ffffff;
+	color: black;
     padding: 3em;
 	/*border: 1px solid lightgray;*/
     border-radius: 20px;

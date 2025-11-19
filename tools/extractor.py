@@ -10,9 +10,19 @@ ODT_FILE = 'test.odt'
 JSON_FILE = '../sample.json'
 
 def clean_extracted(input):
+    # fix nonstandard line breaks
     input = input.replace("\r\n", "\n")
     input = input.replace("\r", "\n")
     input = input.replace("\l", "\n")
+
+    input = input.replace("’", "\'") # curly apostrophe
+
+    return input
+
+def clean_formatting(input):
+    input = input.replace("<i></i>", "") # empty italics element
+    input = input.replace("<b></b>", "") # empty bold element
+
     return input
 
 def get_text_formatting(doc, style_name):
@@ -65,7 +75,10 @@ def extract_text_from_element(element, doc):
             else:
                 text_content.append(extract_text_from_element(child, doc))
     
-    return ''.join(text_content)
+    returns = ''.join(text_content)
+    returns = clean_formatting(returns)
+    
+    return returns
 
 def extract_text_to_json(odt_filepath, json_filepath):
     if not os.path.exists(odt_filepath):
