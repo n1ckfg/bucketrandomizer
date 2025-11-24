@@ -1,4 +1,4 @@
-AUTH_LINE=$(grep -i "^AuthUserFile" ../.htaccess)
+AUTH_LINE=$(grep -i "^AuthUserFile" .htaccess)
 FILE_PATH=$(echo "$AUTH_LINE" | awk '{print $2}')
 USER_NAME=$(echo "$FILE_PATH" | awk -F'/' '{print $3}')
 
