@@ -1,7 +1,7 @@
 AUTH_LINE=$(grep -i "^AuthUserFile" ../.htaccess)
 FILE_PATH=$(echo "$AUTH_LINE" | awk '{print $2}')
 USER_NAME=$(echo "$FILE_PATH" | awk -F'/' '{print $3}')
-USER_NAME="${$USER_NAME:0:-13}"
+USER_NAME="${USER_NAME:0:-13}"
 
 #htpasswd -c /home/username/example.com/.htpasswd user1
 NEW_CMD="htpasswd -c $FILE_PATH $USER_NAME"
