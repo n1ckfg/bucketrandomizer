@@ -72,6 +72,10 @@ a {
     }
 }
 
+.large {
+    font-size: 2em;
+}
+
 .qfont {
     color: yellow;
     font-size: 4em;
