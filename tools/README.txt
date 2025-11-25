@@ -10,7 +10,8 @@ Process:
 2.3. In Word, create a new blank document.
 2.4. In Word, paste the text and save as a docx file.
 2.5. In LibreOffice, open the docx file and save as a new odt file. 
-2.6. Repeat Part 1.
+2.6. In LibreOffice, search and replace regular expression \n for \n to fix newlines.
+2.7. Repeat Part 1.
 
 Nick Fox-Gieg 251123
 
