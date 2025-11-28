@@ -28,7 +28,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'SF Hollywood Hills', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Times New Roman', serif;
 }
 
 a {
@@ -80,6 +80,10 @@ a {
     #textbox {
         font-size: 1.2em;
     }
+}
+
+.cover-font {
+    font-family: 'SF Hollywood Hills', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
 .large {
