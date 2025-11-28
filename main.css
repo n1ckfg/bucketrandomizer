@@ -1,3 +1,11 @@
+@font-face {
+    font-family: 'SF Hollywood Hills';
+    src: url('fonts/sfhh.woff2') format('woff2'), url('fonts/sfhh.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
 strong, b {
 font-weight: bold;
 }
@@ -13,28 +21,30 @@ font-style: italic;
 }
 
 body {
-	background-color: black;
+	background-color: white;
 	color: black;
 	font-size: 14px;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'SF Hollywood Hills', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
 a {
-    color: yellow;
+    color: white;
+    background-color: red;
+    padding: 0.15em 0.3em;
     text-decoration: none;
     text-shadow: -1px -1px 0 red, 1px -1px 0 red, -1px 1px 0 darkred, 1px 1px 0 darkred;
 }
 
 #container {
-    background-color: #ffffff;
-	color: black;
+    background-color: black;
+	color: white;
     padding: 3em;
 	/*border: 1px solid lightgray;*/
-    border-radius: 20px;
+    /*border-radius: 20px;*/
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     display: flex;
     justify-content: center;
