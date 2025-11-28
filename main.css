@@ -21,8 +21,8 @@ font-style: italic;
 }
 
 body {
-	background-color: white;
-	color: black;
+	background-color: black;
+	color: white;
 	font-size: 14px;
     min-height: 100vh;
     display: flex;
@@ -40,8 +40,8 @@ a {
 }
 
 #container {
-    background-color: black;
-	color: white;
+    background-color: white;
+	color: black;
     padding: 3em;
 	/*border: 1px solid lightgray;*/
     /*border-radius: 20px;*/
@@ -60,6 +60,7 @@ a {
 }
 
 #textbox2 {
+    font-family: 'SF Hollywood Hills', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
     font-size: 1.2em;
 }
@@ -80,10 +81,6 @@ a {
     #textbox {
         font-size: 1.2em;
     }
-}
-
-.cover-font {
-    font-family: 'SF Hollywood Hills', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
 .large {
