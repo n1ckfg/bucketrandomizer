@@ -44,7 +44,7 @@ a {
 	color: black;
     padding: 3em;
 	/*border: 1px solid lightgray;*/
-    /*border-radius: 20px;*/
+    border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     display: flex;
     justify-content: center;
