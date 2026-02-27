@@ -34,9 +34,11 @@ body {
 a {
     color: white;
     background-color: yellow;
+    /* background-color: red; */
     padding: 0.15em 0.3em;
     text-decoration: none;
-    text-shadow: -1px -1px 0 red, 1px -1px 0 red, -1px 1px 0 darkred, 1px 1px 0 darkred;
+    /* ext-shadow: -1px -1px 0 red, 1px -1px 0 red, -1px 1px 0 darkred, 1px 1px 0 darkred; */
+    text-shadow: -1px -1px 0 yellow, 1px -1px 0 yellow, -1px 1px 0 darkyellow, 1px 1px 0 darkyellow;
 }
 
 #container {
