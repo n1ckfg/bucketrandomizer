@@ -38,7 +38,7 @@ a {
     padding: 0.15em 0.3em;
     text-decoration: none;
     /* ext-shadow: -1px -1px 0 red, 1px -1px 0 red, -1px 1px 0 darkred, 1px 1px 0 darkred; */
-    text-shadow: -1px -1px 0 yellow, 1px -1px 0 yellow, -1px 1px 0 darkyellow, 1px 1px 0 darkyellow;
+    text-shadow: -1px -1px 0 blueviolet, 1px -1px 0 blueviolet, -1px 1px 0 blue, 1px 1px 0 blue;
 }
 
 #container {
