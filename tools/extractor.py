@@ -13,7 +13,7 @@ def clean_extracted(input):
     # fix nonstandard line breaks
     input = input.replace("\r\n", "\n")
     input = input.replace("\r", "\n")
-    input = input.replace("\l", "\n")
+    input = input.replace("\\l", "\n")
 
     input = input.replace("’", "\'") # curly apostrophe
 
