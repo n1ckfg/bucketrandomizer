@@ -10,6 +10,6 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 cd "$DIR"
 
-python fix_formatting.py $1
+#python fix_formatting.py $1
 python extractor.py $1
 
