@@ -9,4 +9,10 @@ RewriteRule . - [L]
 AuthName "Dialog prompt"
 AuthType Basic
 AuthUserFile /home/bucketofunusedideas/go1.thebucketofunusedideas.com/.htpasswd
+
+# Allow stats directory without authentication
+SetEnvIf Request_URI "^/stats" allow_stats
 Require valid-user
+Satisfy any
+Order allow,deny
+Allow from env=allow_stats
