@@ -1,0 +1,2 @@
+chmod 644 ../.htaccess
+

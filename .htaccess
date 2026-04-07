@@ -1,0 +1,5 @@
+#Protect Directory
+AuthName "Dialog prompt"
+AuthType Basic
+AuthUserFile /home/bucketofunusedideas/go1.thebucketofunusedideas.com/.htpasswd
+Require valid-user
