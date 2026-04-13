@@ -10,10 +10,12 @@ AuthName "Dialog prompt"
 AuthType Basic
 AuthUserFile /home/bucketofunusedideas/go1.thebucketofunusedideas.com/.htpasswd
 
-# Allow stats directory and index.html without authentication
+# Allow these resources without authentication
 SetEnvIf Request_URI "^/stats" allow_access
 SetEnvIf Request_URI "^/$" allow_access
 SetEnvIf Request_URI "^/index\.html$" allow_access
+SetEnvIf Request_URI "^/main\.css$" allow_access
+SetEnvIf Request_URI "^/fonts/" allow_access
 Require valid-user
 Satisfy any
 Order allow,deny
