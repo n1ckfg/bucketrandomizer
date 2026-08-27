@@ -1,0 +1,4 @@
+- Read @MANUAL_WORKFLOW.txt to understand the process being automated.
+- Run CONVERSION.sh shell script which will generate sample.json as output.
+- Diff against testing_sample.json to see differences.
+- Make changes to CONVERSION.py so sample.json is a perfect match for testing_sample.json
