@@ -12,7 +12,7 @@ from odf.element import Node
 from odf.style import Style, TextProperties
 
 ODT_FILE = 'test.odt'
-JSON_FILE = '../sample.json'
+JSON_FILE = 'sample.json'
 
 # STEP 1. FIX FORMATTING.
 """
