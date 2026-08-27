@@ -88,7 +88,7 @@ def normalize_odt_newlines(odt_path):
 def fix_formatting(input_odt, output_odt=None):
     """Run the full ODT formatting fix pipeline."""
     if output_odt is None:
-        output_odt = input_odt
+        output_odt = input_odt.split()[0] + "_fixed.odt"
 
     soffice = find_libreoffice()
     if not soffice:
@@ -283,5 +283,6 @@ def extract_text_to_json(odt_filepath, json_filepath):
 
 if __name__ == "__main__":
     ODT_FILE  = sys.argv[1]
+    ODT_FILE2  = ODT_FILE.split()[0] + "_fixed.odt"
     fix_formatting(ODT_FILE)
-    extract_text_to_json(ODT_FILE, JSON_FILE)
+    extract_text_to_json(ODT_FILE2, JSON_FILE)
