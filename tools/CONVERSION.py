@@ -283,6 +283,31 @@ def extract_text_from_element(element, doc):
     return clean_formatting(render_runs(runs)).strip("\n")
 
 
+BLOCK_TAGS = ('p', 'h')
+
+# <text:list> is only a wrapper: the text lives in the <text:p>/<text:h> inside
+# its list items, and those items may themselves be wrapped in nested lists.
+LIST_TAGS = ('list', 'list-item', 'list-header')
+
+
+def iter_block_lines(element, doc):
+    """Yield one rendered line per block-level element.
+
+    A <text:p> or <text:h> is a single line. A <text:list> contributes one line
+    per block inside it -- rendering the list as a single element would run its
+    items together, because the newline between blocks comes from the caller.
+    Anything else (<text:sequence-decls>, ...) contributes nothing.
+    """
+    tag_name = element.qname[1]
+
+    if tag_name in BLOCK_TAGS:
+        yield extract_text_from_element(element, doc)
+    elif tag_name in LIST_TAGS:
+        for child in element.childNodes:
+            if child.nodeType == Node.ELEMENT_NODE:
+                yield from iter_block_lines(child, doc)
+
+
 def extract_text_to_json(odt_filepath, json_filepath):
     if not os.path.exists(odt_filepath):
         print(f"Error: ODT file not found at {odt_filepath}")
@@ -316,13 +341,9 @@ def extract_text_to_json(odt_filepath, json_filepath):
         new_line_counter_max = 2
 
         for i, element in enumerate(content_elements):
-            tag_name = element.qname[1]
-
-            text_content = extract_text_from_element(element, doc)
-            preview = text_content[:70] + ('...' if len(text_content) > 70 else '')
-
-            if tag_name == 'p':
-                #print(f"[{i+1:03d}] PARAGRAPH: '{preview}'")
+            for text_content in iter_block_lines(element, doc):
+                #preview = text_content[:70] + ('...' if len(text_content) > 70 else '')
+                #print(f"[{i+1:03d}] BLOCK: '{preview}'")
 
                 if (text_content == "" and new_section_armed == False):
                     new_section_armed = True
@@ -338,21 +359,6 @@ def extract_text_to_json(odt_filepath, json_filepath):
                         pass
                 else:
                     new_line += text_content + "\n"
-
-            '''
-            elif tag_name == 'h':
-                # Headings usually have an outline-level attribute
-                level = element.attributes.get(('urn:oasis:names:tc:opendocument:xmlns:text:1.0', 'outline-level'), 'N/A')
-                print(f"[{i+1:03d}] HEADING (L{level}): '{preview}'")
-            elif tag_name == 'list':
-                # This element contains list items (<text:list-item>)
-                item_count = len([c for c in element.childNodes if c.qname[1] == 'list-item'])
-                print(f"[{i+1:03d}] LIST ({item_count} items found): '{preview}'")
-            elif tag_name == 'table':
-                print(f"[{i+1:03d}] TABLE found: '{preview}'")
-            else:
-                print(f"[{i+1:03d}] Other Element: <{tag_name}>: '{preview}'")            
-            '''
 
         with open(json_filepath, 'w', encoding='utf-8') as f:
             json_array = []
