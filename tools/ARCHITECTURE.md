@@ -28,7 +28,7 @@ This step ensures the input `.odt` file has a standard, predictable internal str
 Step 1 used to convert the input `.odt` to `.docx` and back through `soffice --headless`
 first, to emulate the Word round trip in `MANUAL_WORKFLOW.txt` steps 2.2-2.6. It was
 measured against `reference_sample.json` and removed: it produces a byte-identical
-`sample.json`. See `REPORT3.md` for the measurements.
+`sample.json`. 
 
 ---
 

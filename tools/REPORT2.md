@@ -6,6 +6,13 @@ output is now *ahead* of the reference rather than behind it.
 
 Follows on from `REPORT.md`. Nick Fox-Gieg / 2026-09-01
 
+> **Status: resolved.** Recommendation 1 was taken — `reference_sample.json` was
+> regenerated from the fixed pipeline on 2026-09-01 and is now the 813-record output
+> described here. The 8 hunks in "What still differs" and the stray curly apostrophe
+> are gone with it; `sample.json` and `reference_sample.json` are byte-identical
+> (md5 `604df023d108a22b7af5a2230acc8630`). Record counts below (777, 808) are the
+> historical references, not the current one. Continued in `REPORT3.md`.
+
 ## Reproducing
 
 ```bash
@@ -90,6 +97,8 @@ correct — 762 and 788 exactly, 761 down to a single character (below).
 
 ## What still differs, and why it is not fixable here
 
+*Historical — closed by the regeneration described in the status note above.*
+
 Aligned diff is now 804/808, in 8 hunks. Every one is the *opposite* problem:
 **`reference_sample.json` omits heading/list content that the source document
 carries.**
@@ -147,6 +156,9 @@ The extractor is now content-complete and the reference is not. Either:
 
 Note that the fix renumbers `index` from 180 onward (808 → 813 records), which matters
 if anything links to a record by index.
+
+**Taken: option 1**, on 2026-09-01. The reference is now the 813-record output and the
+index renumbering is live — anything linking to a record by index needs re-checking.
 
 ## Latent bugs fixed alongside
 
