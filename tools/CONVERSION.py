@@ -89,7 +89,7 @@ def normalize_odt_newlines(odt_path):
 def fix_formatting(input_odt, output_odt=None):
     """Run the full ODT formatting fix pipeline."""
     if output_odt is None:
-        output_odt = input_odt.split()[0] + "_fixed.odt"
+        output_odt = input_odt + "_fixed.odt"
 
     soffice = find_libreoffice()
     if not soffice:
@@ -116,6 +116,8 @@ def fix_formatting(input_odt, output_odt=None):
     normalize_odt_newlines(output_odt)
 
     print(f"Done: {output_odt}")
+
+    return output_odt
 
 
 # STEP 2. EXTRACTION TO JSON.
@@ -311,77 +313,73 @@ def iter_block_lines(element, doc):
 def extract_text_to_json(odt_filepath, json_filepath):
     if not os.path.exists(odt_filepath):
         print(f"Error: ODT file not found at {odt_filepath}")
-        return
+        sys.exit(1)
 
     print(f"\n2. Loading ODT file: {odt_filepath}")
-    
-    try:
-        doc = load(odt_filepath)
-        
-        extracted_text = []
 
-        content_elements = doc.text.childNodes
-        print(f"--- {os.path.basename(odt_filepath)} ---")
-        print(f"Total elements found: {len(content_elements)}\n")
+    doc = load(odt_filepath)
 
-        '''
-        paragraphs = doc.text.getElementsByType(P)
-        
-        print(f"Found {len(paragraphs)} paragraphs.")
-        
-        for p in paragraphs:
-            text_content = extract_text_from_element(p)
-            if text_content.strip(): # Only include non-empty paragraphs
-                extracted_text.append(text_content.strip())
-        '''
+    extracted_text = []
 
-        new_section_armed = False
-        new_line = ""
-        new_line_counter = 0
-        new_line_counter_max = 2
+    content_elements = doc.text.childNodes
+    print(f"--- {os.path.basename(odt_filepath)} ---")
+    print(f"Total elements found: {len(content_elements)}\n")
 
-        for i, element in enumerate(content_elements):
-            for text_content in iter_block_lines(element, doc):
-                #preview = text_content[:70] + ('...' if len(text_content) > 70 else '')
-                #print(f"[{i+1:03d}] BLOCK: '{preview}'")
+    new_section_armed = False
+    new_line = ""
+    new_line_counter = 0
+    new_line_counter_max = 2
 
-                if (text_content == "" and new_section_armed == False):
-                    new_section_armed = True
-                    new_line = ""
-                    new_line_counter = 0
-                elif (text_content == "" and new_section_armed == True):
-                    if (len(new_line) > 0):
-                        new_line_counter += 1
-                        if (new_line_counter > new_line_counter_max):
-                            extracted_text.append(new_line)
-                            new_section_armed = False
-                    else:
-                        pass
+    for i, element in enumerate(content_elements):
+        for text_content in iter_block_lines(element, doc):
+            #preview = text_content[:70] + ('...' if len(text_content) > 70 else '')
+            #print(f"[{i+1:03d}] BLOCK: '{preview}'")
+
+            if (text_content == "" and new_section_armed == False):
+                new_section_armed = True
+                new_line = ""
+                new_line_counter = 0
+            elif (text_content == "" and new_section_armed == True):
+                if (len(new_line) > 0):
+                    new_line_counter += 1
+                    if (new_line_counter > new_line_counter_max):
+                        extracted_text.append(new_line)
+                        # the section is spent: start the next one clean, so a
+                        # block arriving before the next blank cannot append to
+                        # what was just emitted
+                        new_section_armed = False
+                        new_line = ""
+                        new_line_counter = 0
                 else:
-                    new_line += text_content + "\n"
+                    pass
+            else:
+                # only *consecutive* blanks end a section; blank lines inside
+                # one must not accumulate towards the threshold
+                new_line_counter = 0
+                new_line += text_content + "\n"
 
-        with open(json_filepath, 'w', encoding='utf-8') as f:
-            json_array = []
+    with open(json_filepath, 'w', encoding='utf-8') as f:
+        json_array = []
 
-            for i, item in enumerate(extracted_text):
-                json_object = { 
-                    "index": i, 
-                    "body": item 
-                }
-                json_array.append(json_object)
+        for i, item in enumerate(extracted_text):
+            json_object = { 
+                "index": i, 
+                "body": item 
+            }
+            json_array.append(json_object)
 
-            json.dump(json_array, f, ensure_ascii=False,  indent=4)
-        
-        print(f"Extracted {len(extracted_text)} objects to {json_filepath}.")
+        json.dump(json_array, f, ensure_ascii=False,  indent=4)
 
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    print(f"Extracted {len(extracted_text)} objects to {json_filepath}.")
 
 
 # STEP 3. RUN
 
 if __name__ == "__main__":
-    ODT_FILE  = sys.argv[1]
-    ODT_FILE2  = ODT_FILE.split()[0] + "_fixed.odt"
-    fix_formatting(ODT_FILE)
+    if len(sys.argv) < 2:
+        print(f"Usage: python {os.path.basename(__file__)} <input.odt>")
+        sys.exit(1)
+
+    ODT_FILE = sys.argv[1]
+    ODT_FILE2 = fix_formatting(ODT_FILE)
     extract_text_to_json(ODT_FILE2, JSON_FILE)

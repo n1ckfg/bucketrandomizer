@@ -10,5 +10,5 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 cd "$DIR"
 
-python CONVERSION.py $1
+python CONVERSION.py "$1"
 
